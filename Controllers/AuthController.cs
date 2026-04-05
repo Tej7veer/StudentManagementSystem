@@ -21,22 +21,50 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginDto dto)
     {
-        // Hardcoded for demo — replace with DB check in production
+        // 🔐 Basic validation
+        if (dto == null || string.IsNullOrEmpty(dto.Username) || string.IsNullOrEmpty(dto.Password))
+            return BadRequest(new { message = "Username and Password are required" });
+
+        // 🚫 Dummy validation (replace with DB later)
         if (dto.Username != "admin" || dto.Password != "admin123")
             return Unauthorized(new { message = "Invalid credentials" });
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        // 🔑 Read JWT settings
+        var key = _config["Jwt:Key"];
+        var issuer = _config["Jwt:Issuer"];
+        var audience = _config["Jwt:Audience"];
 
+        if (string.IsNullOrEmpty(key))
+            throw new Exception("JWT Key is missing in configuration");
+
+        // 🔐 Create security key
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        // 📌 Add claims
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.Name, dto.Username),
+            new Claim(ClaimTypes.Role, "Admin"), 
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+        // 🎟️ Create token
         var token = new JwtSecurityToken(
-            issuer: _config["Jwt:Issuer"],
-            audience: _config["Jwt:Audience"],
-            claims: new[] { new Claim(ClaimTypes.Name, dto.Username) },
+            issuer: issuer,
+            audience: audience,
+            claims: claims,
             expires: DateTime.UtcNow.AddHours(2),
-            signingCredentials: creds
+            signingCredentials: credentials
         );
 
+        // 🔄 Convert to string
         var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-        return Ok(new { token = tokenString });
+
+        return Ok(new
+        {
+            token = tokenString,
+            expires = token.ValidTo
+        });
     }
 }
