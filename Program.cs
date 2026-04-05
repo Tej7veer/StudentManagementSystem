@@ -12,7 +12,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 
-// 🔥 Serilog Configuration
+//  Serilog Configuration
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File("logs/app.log", rollingInterval: RollingInterval.Day)
@@ -21,17 +21,17 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 
-// 🗄️ Database
+//  Database
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-// 🔗 Dependency Injection
+//  Dependency Injection
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 
 
-// 🔐 JWT Authentication
+//  JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"];
 
 builder.Services.AddAuthentication(options =>
@@ -59,15 +59,15 @@ builder.Services.AddAuthentication(options =>
 });
 
 
-// 🔐 Authorization
+//  Authorization
 builder.Services.AddAuthorization();
 
 
-// 📦 Controllers
+//  Controllers
 builder.Services.AddControllers();
 
 
-// 📄 Swagger with JWT
+//  Swagger with JWT
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -102,7 +102,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
-    // Optional XML comments
+    //  XML comments
     var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     if (File.Exists(xmlPath))
@@ -113,11 +113,11 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 
-// 🔥 Global Exception Middleware
+//  Global Exception Middleware
 app.UseMiddleware<ExceptionMiddleware>();
 
 
-// 🌐 Swagger
+//  Swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -125,13 +125,11 @@ if (app.Environment.IsDevelopment())
 }
 
 
-// 🔐 Middleware Order (CRITICAL)
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
 
-// 🚀 Endpoints
 app.MapControllers();
 
 app.Run();
