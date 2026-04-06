@@ -21,15 +21,15 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginDto dto)
     {
-        // 🔐 Basic validation
+        // Basic validation
         if (dto == null || string.IsNullOrEmpty(dto.Username) || string.IsNullOrEmpty(dto.Password))
             return BadRequest(new { message = "Username and Password are required" });
 
-        // 🚫 Dummy validation (replace with DB later)
+        // Dummy validation (replace with DB later)
         if (dto.Username != "admin" || dto.Password != "admin123")
             return Unauthorized(new { message = "Invalid credentials" });
 
-        // 🔑 Read JWT settings
+        //  Read JWT settings
         var key = _config["Jwt:Key"];
         var issuer = _config["Jwt:Issuer"];
         var audience = _config["Jwt:Audience"];
@@ -37,11 +37,11 @@ public class AuthController : ControllerBase
         if (string.IsNullOrEmpty(key))
             throw new Exception("JWT Key is missing in configuration");
 
-        // 🔐 Create security key
+        //  Create security key
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        // 📌 Add claims
+        //  Add claims
         var claims = new[]
         {
             new Claim(ClaimTypes.Name, dto.Username),
@@ -49,7 +49,7 @@ public class AuthController : ControllerBase
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        // 🎟️ Create token
+        //  Create token
         var token = new JwtSecurityToken(
             issuer: issuer,
             audience: audience,
@@ -58,7 +58,7 @@ public class AuthController : ControllerBase
             signingCredentials: credentials
         );
 
-        // 🔄 Convert to string
+        //  Convert to string
         var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
         return Ok(new
