@@ -1,8 +1,8 @@
-using StudentManagement.DTOs;
-using StudentManagement.Models;
-using StudentManagement.Repositories;
+using StudentManagementSystm.DTOs;
+using StudentManagementSystm.Models;
+using StudentManagementSystm.Repositories;
 
-namespace StudentManagement.Services;
+namespace StudentManagementSystm.Services;
 
 public class StudentService : IStudentService
 {

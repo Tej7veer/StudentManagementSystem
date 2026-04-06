@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StudentManagement.DTOs;
-using StudentManagement.Services;
+using StudentManagementSystm.DTOs;
+using StudentManagementSystm.Services;
 
-namespace StudentManagement.Controllers;
+namespace StudentManagementSystm.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

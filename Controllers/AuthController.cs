@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using StudentManagement.DTOs;
+using StudentManagementSystm.DTOs;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace StudentManagement.Controllers;
+namespace StudentManagementSystm.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

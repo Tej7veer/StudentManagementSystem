@@ -1,4 +1,4 @@
-namespace StudentManagement.DTOs;
+namespace StudentManagementSystm.DTOs;
 
 public class StudentDto
 {

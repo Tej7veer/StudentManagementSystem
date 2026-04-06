@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text.Json;
 
-namespace StudentManagement.Middleware;
+namespace StudentManagementSystm.Middleware;
 
 public class ExceptionMiddleware
 {

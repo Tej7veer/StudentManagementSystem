@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using StudentManagement.Data;
-using StudentManagement.Middleware;
-using StudentManagement.Repositories;
-using StudentManagement.Services;
+using StudentManagementSystm.Data;
+using StudentManagementSystm.Middleware;
+using StudentManagementSystm.Repositories;
+using StudentManagementSystm.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -62,6 +62,16 @@ builder.Services.AddAuthentication(options =>
 // 🔐 Authorization
 builder.Services.AddAuthorization();
 
+// CORS for Angular UI
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 // 📦 Controllers
 builder.Services.AddControllers();
@@ -115,6 +125,7 @@ var app = builder.Build();
 
 // 🔥 Global Exception Middleware
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseCors("AllowAngular");
 
 
 // 🌐 Swagger

@@ -1,6 +1,6 @@
-using StudentManagement.Models;
+using StudentManagementSystm.Models;
 
-namespace StudentManagement.Repositories;
+namespace StudentManagementSystm.Repositories;
 
 public interface IStudentRepository
 {

@@ -1,4 +1,4 @@
-namespace StudentManagement.Models;
+namespace StudentManagementSystm.Models;
 
 public class Student
 {

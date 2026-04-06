@@ -1,6 +1,6 @@
-using StudentManagement.DTOs;
+using StudentManagementSystm.DTOs;
 
-namespace StudentManagement.Services;
+namespace StudentManagementSystm.Services;
 
 public interface IStudentService
 {
